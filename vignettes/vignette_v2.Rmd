@@ -1,0 +1,136 @@
+---
+title: "partmatch"
+author: "Bridget Hyland"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{partmatch}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Intro
+This package contains functions for performing statistical tests on partially matched samples; that is, data that has a matched pairs design but has some samples missing. The functions included in this package are as follows.
+
+ekbohm: calculates Ekbohm's MLE based test statistic and corresponding p-value
+
+kim: calculates Kim et al.'s modified t-statistic and corresponding p-value
+
+linstivers: calculates Lin & Stivers' MLE based test statistic and corresponding p-value
+
+liptak: calculates the pooled p-value for Liptak's weighted z-test
+
+looneyjones: calculates Looney & Jones' corrected z-statistic and corresponding p-value
+
+The package also includes sample data under homoscedastic and heteroscedastic conditions.
+
+One real-world incidence of partially matched samples is the profiling of genetic and epigenetic markers for cancer research. In such experiments, n tumor and matched normal tissue samples are collected. But it's common for some patients to be missing the tumor sample, and for others to be missing the normal sample, such that n1 patients have both the tumor and normal matched samples; n2 patients have only the tumor sample, and n3 patients have only the normal sample. Rather than only analyzing the n1 matched samples, or treated the n1+n2 and n1+n3 tumor and normal samples as separate, we can use a p-values pooling technique to analyze these partially matched samples.
+
+The sample data is generated from a bivariate Gaussian distribution. The heteroscedastic data can be accessed with hetNA. The tumor samples are in hetNA[,1], and the normal samples are in hetNA[,2].
+```{r hetNA}
+data(hetNA, package = "partmatch")
+## The heteroscedastic data
+hetNA
+## The tumor samples
+hetNA[,1]
+## The normal samples
+hetNA[,2]
+```
+
+Likewise, the homoscedastic data can be accessed with homNA, where the tumor samples are in homNA[,1] and the normal samples in homNA[,2]. 
+```{r homNA}
+data(homNA, package = "partmatch")
+## The homoscedastic data
+homNA
+## The tumor samples
+homNA[,1]
+## The normal samples
+homNA[,2]
+```
+
+## liptak
+liptak is a function that calculates the p-value for Liptak's weighted z-test.
+```{r liptak}
+## liptak(x, y, alternative=c("greater","less","two.sided"))
+## where:    x is the vector of tumor samples
+##           y is the vector of normal samples
+##           alternative is the comparison in the alternative hypothesis. For example, if the alternative hypothesis is H1 > mu0, 
+##            then alternative should be "greater". This argument is optional; the default is "greater".
+```
+This function outputs a single p-value. Let's try an example with the heteroscedastic data.
+```{r liptak_ex}
+library(partmatch)
+test = liptak(hetNA[,1], hetNA[,2], alternative="less")
+test
+```
+
+## kim
+kim is a function that calculates Kim et al.'s modified t-statistic and corresponding p-value.
+```{r kim}
+## kim(x, y, alternative=c("two.sided","less","greater"))
+## where:    x is the vector of tumor samples
+##           y is the vector of normal samples
+##           alternative is the comparison in the alternative hypothesis. For example, if the alternative hypothesis is H1 > mu0, 
+##            then alternative should be "greater". This argument is optional; the default is "two.sided".
+```
+This function outputs a vector of length 2. The first element is the modified t-statistic, and the second element is the p-value. Let's try an example with the heteroscedastic data.
+```{r kim_ex}
+test = kim(hetNA[,1], hetNA[,2], alternative="less")
+test[1]
+test[2]
+```
+
+## looneyjones
+looneyjones is a function that calculates the test statistic and p-value for Looney and Jones's corrected z-test.
+```{r looneyjones}
+## looneyjones(x, y, alternative=c("two.sided","less","greater"))
+## where:    x is the vector of tumor samples
+##           y is the vector of normal samples
+##           alternative is the comparison in the alternative hypothesis. For example, if the alternative hypothesis is H1 > mu0, 
+##            then alternative should be "greater". This argument is optional; the default is "greater".
+```
+This function outputs a vector of length 2. The first element is the corrected z-statistic, and the second element is the p-value. Let's try an example with the heteroscedastic data.
+```{r looneyjones_ex}
+test = looneyjones(hetNA[,1], hetNA[,2], alternative="less")
+test[1]
+test[2]
+```
+
+## linstivers
+linstivers is a function that calculates Lin and Stivers' MLE based test statistic and p-value.
+```{r linstivers}
+## linstivers(x, y, alternative=c("two.sided","less","greater"))
+## where:    x is the vector of tumor samples
+##           y is the vector of normal samples
+##           alternative is the comparison in the alternative hypothesis. For example, if the alternative hypothesis is H1 > mu0, 
+##            then alternative should be "greater". This argument is optional; the default is "two.sided".
+```
+This function outputs a vector of length 2. The first element is the test statistic, and the second element is the p-value. Let's try an example with the heteroscedastic data.
+```{r linstivers_ex}
+test = linstivers(hetNA[,1], hetNA[,2], alternative="less")
+test[1]
+test[2]
+```
+
+## ekbohm
+ekbohm is a function that calculates Ekbohm's MLE based test statistic and p-value.
+```{r ekbohm}
+## ekbohm(x, y, alternative=c("two.sided","less","greater"))
+## where:    x is the vector of tumor samples
+##           y is the vector of normal samples
+##           alternative is the comparison in the alternative hypothesis. For example, if the alternative hypothesis is H1 > mu0, 
+##            then alternative should be "greater". This argument is optional; the default is "two.sided".
+```
+This function outputs a vector of length 2. The first element is the test statistic, and the second element is the p-value. Let's try an example with the heteroscedastic data.
+```{r ekbohm_ex}
+test = ekbohm(hetNA[,1], hetNA[,2], alternative="less")
+test[1]
+test[2]
+```

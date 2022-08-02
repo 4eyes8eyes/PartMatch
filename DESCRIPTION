@@ -1,0 +1,13 @@
+Package: partmatch
+Version: 0.1
+Date: 2021-05-03
+Title: Partially Matched Samples
+Description: Statistical tests for comparing partially matched samples, from Kuan and Huang (2013).
+Author: Bridget Hyland <bridget.hyland@stonybrook.edu>
+Maintainer: Bridget Hyland <bridget.hyland@stonybrook.edu>
+LazyData: True
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+License: MIT + file LICENSE
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr

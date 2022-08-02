@@ -1,0 +1,8 @@
+library(car)
+pdata=read.csv("project1_data.csv",header=TRUE)
+attach(pdata)
+reg=lm(y~X1+X2+X3+X4+X5+X6+X7+X8+X9+X10)
+regsum=summary(reg)
+myboot=Boot(reg, R=10)
+summary(myboot)
+confint(myboot)
